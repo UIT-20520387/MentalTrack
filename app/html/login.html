@@ -14,7 +14,7 @@
 
     <!-- Links -->
     <link rel="stylesheet" href="../styles/shared.css">
-    <link rel="stylesheet" href="../styles/homepage-unsign-in.css">
+    <link rel="stylesheet" href="../styles/login.css">
     <link rel="icon"
         href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23c90e2d'><path d='M718-313 604-426l57-56 57 56 141-141 57 56-198 198ZM440-501Zm0 381L313-234q-72-65-123.5-116t-85-96q-33.5-45-49-87T40-621q0-94 63-156.5T260-840q52 0 99 22t81 62q34-40 81-62t99-22q81 0 136 45.5T831-680h-85q-18-40-53-60t-73-20q-51 0-88 27.5T463-660h-46q-31-45-70.5-72.5T260-760q-57 0-98.5 39.5T120-621q0 33 14 67t50 78.5q36 44.5 98 104T440-228q26-23 61-53t56-50l9 9 19.5 19.5L605-283l9 9q-22 20-56 49.5T498-172l-58 52Z'/></svg>"
         type="image/svg+xml">
@@ -70,7 +70,7 @@
             </li>
 
             <li>
-                <a href="../html/login.html">
+                <a href="#">
                     <div class="menu-item">
                         <span class="material-symbols-outlined">login</span>
                         <span>Đăng nhập</span>
@@ -89,31 +89,34 @@
         </ul>
     </header>
 
-    <main class="home-content">
-        <section id="definition">
-            <h2>Sức khỏe tinh thần là gì?</h2>
-            <p>Sức khỏe tinh thần bao gồm trạng thái cảm xúc, tâm lý và xã hội của một người. Nó ảnh hưởng đến cách
-                chúng ta suy nghĩ, cảm nhận và hành động, cũng như cách chúng ta đối phó với căng thẳng, tương tác với
-                người khác và đưa ra quyết định. Sức khỏe tinh thần quan trọng ở mọi giai đoạn của cuộc đời, từ thời thơ
-                ấu và thanh thiếu niên đến tuổi trưởng thành và tuổi già.</p>
-        </section>
-
-        <section id="article">
-            <h2>Bài viết</h2>
-            <div class="article-list">
-                <div class="article-item">
-                    <h3><a href="#">10 cách giảm căng thẳng hiệu quả</a></h3>
-                    <p>Bài viết này cung cấp các mẹo và kỹ thuật đã được chứng minh để giúp bạn đối phó với căng thẳng trong cuộc sống hàng ngày.</p>
-                    <a href="#" class="read-more">Đọc thêm</a>
-                </div>
-                <div class="article-item">
-                    <h3><a href="#">Tầm quan trọng của giấc ngủ đối với sức khỏe tinh thần</a></h3>
-                    <p>Tìm hiểu về mối liên hệ giữa giấc ngủ đủ giấc và trạng thái tinh thần tích cực.</p>
-                    <a href="#" class="read-more">Đọc thêm</a>
-                </div>
+    <main>
+        <section>
+            <div class="login-container">
+                <h1>ĐĂNG NHẬP</h1>
+                <form id="login-form">
+                    <div class="input-group">
+                        <input type="text" id="username" name="username" placeholder="Tên tài khoản hoặc Địa chỉ email">
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" placeholder="Mật khẩu">
+                    </div>
+                    <div class="options">
+                        <label>
+                            <input type="checkbox" name="remember"> <span>Ghi nhớ Tài khoản</span> 
+                        </label>
+                    </div>
+                    <section class="flex-list">
+                        <div class="signup-link">
+                            <span>Chưa có Tài khoản</span> <a href="../html/register.html"><strong>ĐĂNG KÝ NGAY</strong></a>
+                        </div>
+                        <div>
+                            <button type="submit" class="login-button">Đăng nhập</button>
+                        </div>
+                    </section>  
+                </form>
             </div>
-            <a href="#" class="view-all-articles">Xem tất cả bài viết</a>
         </section>
+        
     </main>
 
     <footer>
