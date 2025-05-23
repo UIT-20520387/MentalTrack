@@ -1,0 +1,189 @@
+.home-content{
+    padding: 20px;
+    margin: 0 10px;
+}
+
+.home-content h2{
+    font-family: 'Noto Sans', 'sans-serif';
+    font-size: 28px;
+} 
+
+.home-content h3{
+    font-family: 'Noto Sans', 'sans-serif';
+    font-size: 20px;
+}
+
+/* Feelings */
+#mood-scale{
+    margin-bottom: 30px;
+}
+
+#mood-scale h2{
+    color: rgb(56, 142, 237);
+    margin-top: 0;
+}
+
+.diary-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.diary-link span{
+    color: rgb(56, 142, 237);
+}
+
+.diary-link a {
+    display: flex;
+    align-items: center;
+    color: rgb(56, 142, 237);
+    text-decoration: none;
+}
+
+.diary-link a:hover {
+    text-decoration: underline;
+}
+
+.diary-link a strong {
+    display: flex;
+    align-items: center;
+}
+
+.diary-link .material-symbols-outlined {
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.diary-link .material-symbols-outlined:hover {
+    text-decoration: none;
+}
+
+/* Mood Buttons */
+.mood-buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.mood-btn {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: inherit;
+    font-size: 1em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.mood-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.mood-btn .material-symbols-outlined {
+    font-size: 48px;
+    margin-bottom: 5px;
+    color: rgb(85, 85, 85);
+    transition: color 0.3s ease;
+}
+
+.mood-btn.selected {
+    font-weight: bold;
+}
+
+/* Style for each mood */
+
+/* Happy */
+.mood-btn[data-mood="happy"].selected {
+    color: rgba(38, 215, 238, 0.911); 
+}
+.mood-btn[data-mood="happy"].selected .material-symbols-outlined {
+    color: rgba(38, 215, 238, 0.911)
+}
+
+/* Joyful */
+.mood-btn[data-mood="joyful"].selected {
+    color: rgba(131, 12, 187, 0.842); 
+}
+.mood-btn[data-mood="joyful"].selected .material-symbols-outlined {
+    color: rgba(131, 12, 187, 0.842); 
+}
+
+/* Normal */
+.mood-btn[data-mood="normal"].selected {
+    color: rgba(230, 100, 191, 0.692); 
+}
+.mood-btn[data-mood="normal"].selected .material-symbols-outlined {
+    color: rgba(230, 100, 191, 0.692); 
+}
+
+/* Sad */
+.mood-btn[data-mood="sad"].selected {
+    color: rgb(231, 27, 61); 
+}
+.mood-btn[data-mood="sad"].selected .material-symbols-outlined {
+    color: rgb(231, 27, 61); 
+}
+
+/* Awful */
+.mood-btn[data-mood="awful"].selected {
+    color: rgb(204, 52, 14); 
+}
+.mood-btn[data-mood="awful"].selected .material-symbols-outlined {
+    color: rgb(204, 52, 14); 
+}
+
+
+/* ----------------------------------------------------------------------------------- */
+
+/* Article */
+#article h2{
+    color: rgb(56, 142, 237);
+    margin-top: 0;
+}
+
+
+.article-item{
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 2px solid rgb(238, 238, 238);
+    border-radius: 5px;
+}
+
+.article-item h3 a {
+    color: rgb(56, 142, 237);
+    text-decoration: none;
+}
+
+.article-item h3 a:hover {
+    text-decoration: underline;
+}
+
+.read-more {
+    color: rgb(108, 117, 125);
+    text-decoration: none;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+.view-all-articles {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: rgb(56, 142, 237);
+    text-decoration: none;
+}
+
+.view-all-articles:hover {
+    text-decoration: underline;
+}
