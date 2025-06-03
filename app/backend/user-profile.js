@@ -3,11 +3,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
 import {
   getAuth,
-  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 import {
   getFirestore,
-  setDoc,
+  getDoc,
   doc,
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
@@ -29,6 +30,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 //Show message
 function showMessage(message, divId) {
@@ -41,55 +44,52 @@ function showMessage(message, divId) {
   }, 5000);
 }
 
-//Button
-const registerBtn = document.getElementById("register-btn");
-registerBtn.addEventListener("click", (event) => {
-  event.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+  //DOM Elements
+  const fullName = document.getElementById("fullname");
+  const gender = document.getElementById("gender");
+  const birthday = document.getElementById("birthday");
+  const email = document.getElementById("email");
+  const logoutBtn = document.getElementById("logout");
 
-  //Inputs
-  const fullName = document.getElementById("fullname").value;
-  const gender = document.getElementById("gender").value;
-  const birthday = document.getElementById("birthday").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const reEnterPassword = document.getElementById("re-enter-password").value;
-
-  if (password !== reEnterPassword) {
-    showMessage("Mật khẩu xác nhận không khớp", "registerMessage");
-    return;
-  }
-
-  const auth = getAuth();
-  const db = getFirestore();
-
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-
-      const userData = {
-        fullName: fullName,
-        gender: gender,
-        birthday: birthday,
-        email: email,
-        uid: user.uid,
-      };
-
-      showMessage("Tài khoản được tạo thành công", "registerMessage");
+  // Fetch user details
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      //     // User is signed in
       const docRef = doc(db, "users", user.uid);
-      setDoc(docRef, userData)
+      getDoc(docRef).then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          fullName.textContent = userData.fullName;
+          gender.textContent = userData.gender;
+          birthday.textContent = userData.birthday;
+          email.textContent = userData.email;
+        } else {
+          showMessage("Không tìm thấy dữ liệu người dùng", "profileMessage");
+        }
+      });
+    } else {
+      // User is not signed in, redict to login page
+      showMessage(
+        "Người dùng chưa đăng nhập. Chuyển hướng...",
+        "profileMessage"
+      );
+      window.location.href = "../html/login.html";
+    }
+  });
+
+  //Logout
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth)
         .then(() => {
+          //Logout success
+          localStorage.removeItem("loggedInUserId");
           window.location.href = "../html/login.html";
         })
         .catch((error) => {
-          console.error("Lỗi ghi tài liệu", error);
+          showMessage("Đăng xuất thất bại. Vui lòng thử lại", "profileMessage");
         });
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      if (errorCode == "auth/email-already-in-use") {
-        showMessage("Email đã tồn tại!", "registerMessage");
-      } else {
-        showMessage("Không thể tạo tài khoản", "registerMessage");
-      }
     });
+  }
 });

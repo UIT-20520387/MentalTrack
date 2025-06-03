@@ -1,0 +1,11 @@
+.profile-item{
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 2px solid rgb(238, 238, 238);
+    border-radius: 5px;
+}
+
+#profile h2{
+    color: rgb(56, 142, 237);
+    margin-top: 0;
+}

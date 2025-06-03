@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: "sans-serif";
+  font-family: "Noto Sans", "sans-serif";
   font-size: 16px;
 }
 
@@ -22,7 +22,6 @@ header {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  font-family: "Noto Sans", "sans-serif";
   text-transform: uppercase;
 }
 
@@ -60,12 +59,10 @@ footer {
   padding: 20px 0;
   text-align: center;
   font-size: 0.9em;
-  font-family: "Noto Sans", "sans-serif";
   color: rgb(51, 51, 51);
 }
 
 .container {
-  /* max-width: 960px; Hoặc kích thước container chính của bạn */
   margin: 0 30px;
   display: flex;
   justify-content: space-between;
@@ -90,6 +87,20 @@ footer ul li a {
 
 footer ul li a:hover {
   font-weight: bold;
+}
+
+/* Home-content */
+.home-content {
+  padding: 20px;
+  margin: 0 10px;
+}
+
+.home-content h2 {
+  font-size: 28px;
+}
+
+.home-content h3 {
+  font-size: 20px;
 }
 
 /* Message */
