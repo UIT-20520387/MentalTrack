@@ -1,0 +1,137 @@
+.goal-list {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 2px solid rgb(238, 238, 238);
+  border-radius: 5px;
+}
+
+#goal h2 {
+  margin-top: 0;
+}
+
+.input-group {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.input-group label {
+  display: flex;
+  align-items: center;
+}
+
+.input-group input[type="text"],
+.input-group select {
+  flex: 2;
+  padding: 8px;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 4px;
+  width: 0;
+  font-size: 16px;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: rgb(56, 142, 237);
+  box-shadow: 0 0 5px rgba(30, 85, 161, 0.5);
+}
+
+button[type="submit"] {
+  padding: 10px 15px;
+  color: rgb(142, 150, 170);
+  border: 1px solid;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 20px;
+  size: 50px;
+  margin-right: 10px;
+}
+
+.add-button:hover {
+  background-color: rgb(56, 142, 237);
+  color: white;
+}
+
+.goal-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.goal-item > div:last-child {
+  flex: 1;
+  text-align: right;
+}
+
+#list-container li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+
+  list-style: none;
+  font-size: 16px;
+  padding: 12px 8px;
+  user-select: none;
+  cursor: pointer;
+  position: relative;
+}
+
+#list-container li:last-child {
+  border-bottom: none;
+}
+
+#list-container li label {
+  display: flex;
+  align-items: flex-start;
+  flex-grow: 1;
+  overflow: hidden;
+  /* flex-wrap: wrap; */
+}
+
+#list-container li label span {
+  word-break: break-word;
+  flex-grow: 1;
+  padding-right: 10px;
+}
+
+#list-container input[type="checkbox"]:checked + span {
+  text-decoration: line-through;
+  color: rgb(108, 117, 125);
+}
+
+#list-container input[type="checkbox"] {
+  appearance: auto;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  background-color: rgb(56, 142, 237);
+  vertical-align: middle;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.delete-btn {
+  background-color: transparent;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  /* font-size: 0.9em; */
+  margin-left: auto;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.delete-btn .material-symbols-outlined {
+  font-size: 20px;
+  vertical-align: middle;
+}

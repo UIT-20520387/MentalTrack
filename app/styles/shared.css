@@ -97,10 +97,12 @@ footer ul li a:hover {
 
 .home-content h2 {
   font-size: 28px;
+  color: rgb(56, 142, 237);
 }
 
 .home-content h3 {
   font-size: 20px;
+  color: rgb(56, 142, 237);
 }
 
 /* Message */

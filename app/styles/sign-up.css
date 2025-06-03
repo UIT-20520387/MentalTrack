@@ -79,10 +79,6 @@ h1 {
     text-decoration: underline;
 }
 
-.options input[type="checkbox"] {
-    margin-right: 5px;
-}
-
 button[type="submit"]{
     padding: 10px 15px;
     color: rgb(142, 150, 170);
