@@ -1,8 +1,10 @@
 .goal-list {
   margin-bottom: 20px;
+  min-height: 300px;
   padding: 15px;
   border: 2px solid rgb(238, 238, 238);
   border-radius: 5px;
+  overflow-y: auto;
 }
 
 #goal h2 {
@@ -49,6 +51,7 @@ button[type="submit"] {
   font-size: 20px;
   size: 50px;
   margin-right: 10px;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .add-button:hover {
@@ -67,19 +70,26 @@ button[type="submit"] {
   text-align: right;
 }
 
+#list-container {
+  padding: 0; 
+  margin: 0; 
+  width: 100%; 
+}
+
 #list-container li {
+  
+  box-sizing: border-box;
+  font-size: 16px;
+  padding: 12px 8px;
+  border-bottom: 1px solid rgb(238, 238, 238);
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
-  box-sizing: border-box;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 5px;
-  padding-bottom: 5px;
-
   list-style: none;
-  font-size: 16px;
-  padding: 12px 8px;
   user-select: none;
   cursor: pointer;
   position: relative;
@@ -129,6 +139,11 @@ button[type="submit"] {
   margin-left: auto;
   align-self: center;
   flex-shrink: 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #f0f0f0;
 }
 
 .delete-btn .material-symbols-outlined {
