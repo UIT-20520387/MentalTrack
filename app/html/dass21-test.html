@@ -14,11 +14,12 @@
 
     <!-- Links -->
     <link rel="stylesheet" href="../styles/shared.css">
-    <link rel="stylesheet" href="../styles/user-profile.css">
+    <link rel="stylesheet" href="../styles/test.css">
+    <link rel="stylesheet" href="../styles/test-assignment.css">
+
     <link rel="icon"
         href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23c90e2d'><path d='M718-313 604-426l57-56 57 56 141-141 57 56-198 198ZM440-501Zm0 381L313-234q-72-65-123.5-116t-85-96q-33.5-45-49-87T40-621q0-94 63-156.5T260-840q52 0 99 22t81 62q34-40 81-62t99-22q81 0 136 45.5T831-680h-85q-18-40-53-60t-73-20q-51 0-88 27.5T463-660h-46q-31-45-70.5-72.5T260-760q-57 0-98.5 39.5T120-621q0 33 14 67t50 78.5q36 44.5 98 104T440-228q26-23 61-53t56-50l9 9 19.5 19.5L605-283l9 9q-22 20-56 49.5T498-172l-58 52Z'/></svg>"
         type="image/svg+xml">
-    <script type="module" src="../backend/user-profile.js" defer></script>
     <title>Mental Track</title>
 </head>
 
@@ -89,18 +90,23 @@
             </li>
         </ul>
     </header>
-    <main class="home-content">
-        <section id="profile">
-            <div class="profile-list">
-                <div id="profileMessage" class="messageDiv" style="display: none;"></div>
-                <div class="profile-item">
-                    <h2>Thông tin cá nhân</h2>
-                    <p class="strong"> Họ tên: <span id="fullname"></span> </p>
-                    <p> Giới tính: <span id="gender"></span> </p>
-                    <p> Ngày sinh: <span id="birthday"></span> </p>
-                    <p> Email: <span id="email"></span> </p>
-                </div>
+    <main class="test-content">
+        <section id="assessment-section">
+            <h2>Trắc nghiệm DASS-21</h2>
+            <div id="aboveMessage" class="messageDiv" style="display: none;"></div>
+
+            <div class="test-item description-box">
+                <h3>Cách thức thực hiện</h3>
+                <p id="assessment-description"></p>
             </div>
+            <form id="dass21-form" class="test-list">
+                <div id="questions-container"></div>
+                <button type="submit" id="submit-dass21-btn" class="submit-btn"> Nộp </button>
+            </form>
+            <div id="belowMessage" class="messageDiv" style="display: none;"></div>
+            <div id="dass21-final-result" class="final-result-display" style="display:none;"></div>
+
+
         </section>
     </main>
     <footer>
@@ -113,6 +119,8 @@
             </ul>
         </div>
     </footer>
+    <script type="module" src="../backend/dass21-test.js" defer></script>
+    <script type="module" src="../backend/user-profile.js"></script>
 
 </body>
 

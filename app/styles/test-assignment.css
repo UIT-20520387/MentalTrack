@@ -1,0 +1,131 @@
+/* css/quiz.css */
+.test-content {
+  /* max-width: 800px; */
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#assessment-section h2 {
+  text-align: center;
+  color: rgb(56, 142, 237);
+  margin-bottom: 30px;
+}
+
+.description-box {
+  margin-bottom: 30px;
+  padding: 15px 20px;
+  background-color: #f0f8ff; /* Light blue background */
+  border-left: 5px solid #007bff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.description-box h3 {
+  color: rgb(56, 142, 237);
+  margin-top: 0;
+}
+
+.description-box p {
+  color: #555;
+  line-height: 1.6;
+}
+
+.test-list {
+  margin-bottom: 20px;
+  padding: 15px;
+  /* border: 2px solid rgb(238, 238, 238); */
+  border-radius: 5px;
+  overflow-y: auto;
+}
+
+.test-item {
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+/* .test-item:last-child {
+  border-bottom: none; /* Không có đường kẻ dưới cho câu hỏi cuối cùng 
+} */
+
+.test-item h3.questions {
+  font-size: 1.15em;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 18px;
+}
+
+.options-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Khoảng cách giữa các lựa chọn */
+}
+
+.options-group label {
+  display: flex;
+  align-items: center;
+  font-size: 1em;
+  color: #444;
+  cursor: pointer;
+  padding: 10px 15px;
+  /* border: 1px solid #ddd; */
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  background-color: #fdfdfd;
+}
+
+.options-group label:hover {
+  background-color: #eef5ff;
+  border-color: #007bff;
+  box-shadow: 0 1px 5px rgba(0, 123, 255, 0.1);
+}
+
+.options-group input[type="radio"] {
+  margin-right: 12px;
+  transform: scale(1.3); /* Phóng to radio button */
+  accent-color: #007bff; /* Thay đổi màu mặc định của radio button */
+  cursor: pointer;
+}
+
+.submit-btn {
+  display: block;
+  width: 250px;
+  padding: 15px 25px;
+  margin: 40px auto 0;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #fff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+}
+
+.submit-btn:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Keyframe cho hiệu ứng fadeOut */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  } /* Giữ nguyên 1 lúc rồi mới fade */
+  to {
+    opacity: 0;
+    display: none;
+  }
+}

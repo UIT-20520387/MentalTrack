@@ -1,0 +1,41 @@
+/* Tests */
+.test-content {
+  padding: 20px;
+  margin: 0 10px;
+  min-height: 360px;
+}
+
+#test h2{
+    color: rgb(56, 142, 237);
+    margin-top: 0;
+    font-size: 28px;
+}
+
+.test-item{
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 2px solid rgb(238, 238, 238);
+    border-radius: 5px;
+}
+
+.test-item h3 {
+    font-size: 20px;
+}
+
+.test-item h3 a {
+    color: rgb(56, 142, 237);
+    text-decoration: none;
+}
+
+.test-item h3 a:hover {
+    text-decoration: underline;
+}
+
+.do-test {
+    color: rgb(108, 117, 125);
+    text-decoration: none;
+}
+
+.do-test:hover {
+    text-decoration: underline;
+}
