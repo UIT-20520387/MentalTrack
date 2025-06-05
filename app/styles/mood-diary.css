@@ -1,4 +1,213 @@
+/* Mood Buttons */
+.mood-buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.mood-btn {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: inherit;
+  font-size: 1em;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.mood-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.mood-btn .material-symbols-outlined {
+  font-size: 48px;
+  margin-bottom: 5px;
+  color: rgb(85, 85, 85);
+  transition: color 0.3s ease;
+}
+
+.mood-btn.selected {
+  font-weight: bold;
+}
+
+/* Style for each mood */
+
+/* Happy */
+.mood-btn[data-mood="happy"].selected {
+  color: rgba(38, 215, 238, 0.911);
+}
+.mood-btn[data-mood="happy"].selected .material-symbols-outlined {
+  color: rgba(38, 215, 238, 0.911);
+}
+
+/* Joyful */
+.mood-btn[data-mood="joyful"].selected {
+  color: rgba(131, 12, 187, 0.842);
+}
+.mood-btn[data-mood="joyful"].selected .material-symbols-outlined {
+  color: rgba(131, 12, 187, 0.842);
+}
+
+/* Normal */
+.mood-btn[data-mood="normal"].selected {
+  color: rgba(230, 100, 191, 0.692);
+}
+.mood-btn[data-mood="normal"].selected .material-symbols-outlined {
+  color: rgba(230, 100, 191, 0.692);
+}
+
+/* Sad */
+.mood-btn[data-mood="sad"].selected {
+  color: rgb(231, 27, 61);
+}
+.mood-btn[data-mood="sad"].selected .material-symbols-outlined {
+  color: rgb(231, 27, 61);
+}
+
+/* Awful */
+.mood-btn[data-mood="awful"].selected {
+  color: rgb(204, 52, 14);
+}
+.mood-btn[data-mood="awful"].selected .material-symbols-outlined {
+  color: rgb(204, 52, 14);
+}
+
+.diary-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
 #diary-entry-text {
-    min-height: 200px;
-    width: 100%;
+  min-height: 200px;
+  width: 100%;
+  font-family: "Noto Sans", "sans-serif";
+  font-size: 16px;
+}
+
+/* Style cho nút lưu nhật ký */
+.submit-btn {
+  display: block;
+  width: 250px;
+  padding: 15px 25px;
+  margin: 40px auto 0;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #fff;
+  background-color: rgb(40, 167, 69);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+}
+
+.submit-btn:hover {
+  background-color: rgb(33, 136, 56);
+  transform: translateY(-2px);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* View */
+.view-section {
+  display: none; /* Mặc định ẩn tất cả các view */
+  min-height: 300px;
+}
+.view-section.active {
+  display: block; /* Hiển thị view đang active */
+}
+
+/* Thêm một số style cơ bản cho list item */
+.diary-item {
+  border: 1px solid rgb(204, 204, 204);
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background-color: rgb(249, 249, 249);
+}
+.diary-item h3 {
+  margin-top: 0;
+  color: rgb(51, 51, 51);
+}
+.diary-item p {
+  margin-bottom: 5px;
+  color: rgb(85, 85, 85);
+}
+.diary-item .notes {
+  font-style: italic;
+  color: rgb(119, 119, 119);
+  border-top: 1px dashed rgb(238, 238, 238);
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+/* Style cho nút "Viết nhật ký mới", "Xem nhật ký" và nút "Sửa", "Xoá" */
+.nav-button,
+.edit-btn,
+.delete-btn {
+  /* display: block; */
+  width: 200px;
+  padding: 10px 20px;
+  margin-right: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+  background-color: rgb(56, 142, 237);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+}
+.nav-button:hover,
+.edit-btn:hover,
+.delete-btn:hover {
+  background-color: rgb(3, 96, 196);
+  transform: translateY(-2px);
+}
+
+.nav-button:active,
+.edit-btn:active,
+.delete-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Màu cho nút Xoá */
+.delete-btn {
+  background-color: rgb(223, 21, 21);
+}
+
+.delete-btn:hover {
+  background-color: rgb(190, 23, 23);
+}
+
+/* Style cho nút Xoá và Sửa */
+.edit-btn,
+.delete-btn {
+  width: 70px;
+  margin-top: 10px;
+}
+
+/* Màu cho nút "Viết nhật ký mới" */
+#showNewEntryViewBtn {
+  background-color: rgb(40, 167, 69);
+}
+
+#showNewEntryViewBtn:hover {
+  background-color: rgb(33, 136, 56);
 }

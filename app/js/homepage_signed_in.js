@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Cập nhật text trong dòng "Tôi cảm thấy"
             const moodValue = this.dataset.mood; // Lấy giá trị từ data-mood
-            feelingSpan.textContent = `Tôi cảm thấy "${moodTextMap[moodValue]}".`;
+            feelingSpan.textContent = `Tôi cảm thấy ${moodTextMap[moodValue]}.`;
         });
     });
 

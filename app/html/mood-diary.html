@@ -14,7 +14,6 @@
 
     <!-- Links -->
     <link rel="stylesheet" href="../styles/shared.css">
-    <link rel="stylesheet" href="../styles/homepage_signed_in.css">
     <link rel="stylesheet" href="../styles/mood-diary.css">
 
     <link rel="icon"
@@ -92,8 +91,13 @@
         </ul>
     </header>
     <main class="home-content">
-        <section id="mood-scale">
-            <h2>Nhật ký cảm xúc </h2>
+        <h2>Nhật ký cảm xúc </h2>
+        <div class="nav-buttons-container">
+            <button id="showNewEntryViewBtn" class="nav-button">Viết nhật ký mới</button>
+            <button id="showDiaryListViewBtn" class="nav-button">Xem nhật ký của tôi</button>
+        </div>
+
+        <section id="new-entry-view" class="view-section active">
             <div class="mood-buttons-container">
                 <button class="mood-btn" data-mood="happy">
                     <div class="menu-item">
@@ -129,15 +133,21 @@
             <div class="diary-link">
                 <span>Tôi cảm thấy </span>
             </div>
-            <input type="hidden" id="selected-emotion-value" name="emotionValue">
-            <input type="hidden" id="selected-emotion-text" name="emotionText">
 
             <div id="mood-message" class="messageDiv" style="display: none;"></div>
 
             <p>Viết một chút về ngày của bạn:</p>
+            <p>Hãy mô tả chuyện gì đang xảy ra trong cuộc sống hiện tại của bạn hoặc những suy nghĩ của bạn hôm nay.</p>
             <textarea id="diary-entry-text" name="diaryEntry" placeholder="Hôm nay của tôi..."></textarea>
 
-            <button type="submit" id="save-diary-btn">Lưu nhật ký</button>
+            <button type="submit" id="save-diary-btn" class="submit-btn">Lưu nhật ký</button>
+        </section>
+
+        <section id="diary-list-view" class="view-section">
+            <div id="no-diary-entries-message" class="messageDiv" style="display: none;"></div>
+
+            <h3>Nhật ký của tôi</h3>
+            <div id="diary-entries-container"></div>
         </section>
 
     </main>
@@ -153,7 +163,6 @@
     </footer>
 
     <script type="module" src="../backend/mood-diary.js"></script>
-    <!-- <script type="module" src="../js/homepage_signed_in.js"></script> -->
 </body>
 
 </html>
