@@ -14,7 +14,9 @@
 
     <!-- Links -->
     <link rel="stylesheet" href="../styles/shared.css">
-    <link rel="stylesheet" href="../styles/goal.css">
+    <link rel="stylesheet" href="../styles/homepage_signed_in.css">
+    <link rel="stylesheet" href="../styles/mood-diary.css">
+
     <link rel="icon"
         href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23c90e2d'><path d='M718-313 604-426l57-56 57 56 141-141 57 56-198 198ZM440-501Zm0 381L313-234q-72-65-123.5-116t-85-96q-33.5-45-49-87T40-621q0-94 63-156.5T260-840q52 0 99 22t81 62q34-40 81-62t99-22q81 0 136 45.5T831-680h-85q-18-40-53-60t-73-20q-51 0-88 27.5T463-660h-46q-31-45-70.5-72.5T260-760q-57 0-98.5 39.5T120-621q0 33 14 67t50 78.5q36 44.5 98 104T440-228q26-23 61-53t56-50l9 9 19.5 19.5L605-283l9 9q-22 20-56 49.5T498-172l-58 52Z'/></svg>"
         type="image/svg+xml">
@@ -35,7 +37,7 @@
             </li>
 
             <li>
-                <a href="../html/mood-diary.html">
+                <a href="#">
                     <div class="menu-item">
                         <span class="material-symbols-outlined">diagnosis</span>
                         <span>Nhật ký cảm xúc</span>
@@ -53,7 +55,7 @@
             </li>
 
             <li>
-                <a href="#">
+                <a href="../html/goal.html">
                     <div class="menu-item">
                         <span class="material-symbols-outlined">checklist</span>
                         <span>Mục tiêu</span>
@@ -90,23 +92,54 @@
         </ul>
     </header>
     <main class="home-content">
-        <section id="goal">
-            <div class="goal-list">
-                <h2>Mục tiêu</h2>
-                <div id="goalMessage" class="messageDiv" style="display: none;"></div>
-                <div class="goal-item">
-                    <div class="input-group">
-                        <label for="task"> </label>
-                        <input type="text" id="task" name="task" required placeholder="Thêm mục tiêu">
+        <section id="mood-scale">
+            <h2>Nhật ký cảm xúc </h2>
+            <div class="mood-buttons-container">
+                <button class="mood-btn" data-mood="happy">
+                    <div class="menu-item">
+                        <span class="material-symbols-outlined">sentiment_very_satisfied</span>
+                        <span>Hạnh phúc</span>
                     </div>
-                    <div class="add-goal-btn">
-                        <button type="submit" id="add-btn" class="add-button">Thêm</button>
+                </button>
+                <button class="mood-btn" data-mood="joyful">
+                    <div class="menu-item">
+                        <span class="material-symbols-outlined">mood</span>
+                        <span>Vui vẻ</span>
                     </div>
-                </div>
-
-                <ul id="list-container"></ul>
+                </button>
+                <button class="mood-btn" data-mood="normal">
+                    <div class="menu-item">
+                        <span class="material-symbols-outlined">sentiment_neutral</span>
+                        <span>Bình thường</span>
+                    </div>
+                </button>
+                <button class="mood-btn" data-mood="sad">
+                    <div class="menu-item">
+                        <span class="material-symbols-outlined">mood_bad</span>
+                        <span>Buồn</span>
+                    </div>
+                </button>
+                <button class="mood-btn" data-mood="awful">
+                    <div class="menu-item">
+                        <span class="material-symbols-outlined">sentiment_stressed</span>
+                        <span>Tồi tệ</span>
+                    </div>
+                </button>
             </div>
+            <div class="diary-link">
+                <span>Tôi cảm thấy </span>
+            </div>
+            <input type="hidden" id="selected-emotion-value" name="emotionValue">
+            <input type="hidden" id="selected-emotion-text" name="emotionText">
+
+            <div id="mood-message" class="messageDiv" style="display: none;"></div>
+
+            <p>Viết một chút về ngày của bạn:</p>
+            <textarea id="diary-entry-text" name="diaryEntry" placeholder="Hôm nay của tôi..."></textarea>
+
+            <button type="submit" id="save-diary-btn">Lưu nhật ký</button>
         </section>
+
     </main>
     <footer>
         <div class="container">
@@ -118,7 +151,9 @@
             </ul>
         </div>
     </footer>
-    <script type="module" src="../backend/goal.js"></script>
+
+    <script type="module" src="../backend/mood-diary.js"></script>
+    <!-- <script type="module" src="../js/homepage_signed_in.js"></script> -->
 </body>
 
 </html>

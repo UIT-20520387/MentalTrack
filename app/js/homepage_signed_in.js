@@ -31,7 +31,4 @@ document.addEventListener('DOMContentLoaded', function() {
     if (normalButton) {
         normalButton.click();
     }
-    // (Tùy chọn) Thiết lập trạng thái mặc định ban đầu nếu không có button nào được chọn
-    // Ví dụ, không có gì được chọn, hoặc chọn "Bình thường"
-    // emotionButtons[2].click(); // Simulate click on "Bình thường" on load
 });
