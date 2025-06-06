@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // === Hàm lấy mức độ GAD-7 ===
   function getGad7Level(score) {
     if (score >= 15) return "Lo âu nặng";
-    if (score >= 10) return "Lo âu trung bình";
+    if (score >= 10) return "Lo âu vừa";
     if (score >= 5) return "Lo âu nhẹ";
     return "Bình thường" ;
   }

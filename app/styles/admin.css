@@ -6,8 +6,8 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
-/* Style for the user table */
-.user-table {
+/* Style for the table */
+.table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
@@ -17,42 +17,162 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.user-table th,
-.user-table td {
+.table th,
+.table td {
   border: none;
   padding: 12px 15px;
   text-align: left;
   white-space: nowrap; /* Ngăn chữ bị xuống dòng */
 }
 
-.user-table th {
+.table th {
   background-color: #e9ecef; /* Light grey header */
   font-weight: 500;
   color: #495057;
 }
 
-.user-table tbody tr:nth-child(even) {
+.table tbody tr:nth-child(even) {
   background-color: #f2f2f2; /* Alternating row color */
 }
 
-.user-table tbody tr:hover {
+.table tbody tr:hover {
   background-color: #f0f0f0; /* Hover effect */
 }
 
-.user-table th:first-child,
-.user-table td:first-child {
+.table th:first-child,
+.table td:first-child {
   padding-left: 20px;
 }
 
-.user-table th:last-child,
-.user-table td:last-child {
+.table th:last-child,
+.table td:last-child {
   padding-right: 20px;
 }
 
+/* Style cho form */
+.assessment-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-section {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.form-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.form-section label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+
+.form-section input[type="text"],
+.form-section input[type="number"],
+.form-section textarea,
+.form-section select {
+    width: calc(100% - 22px); /* Adjust for padding and border */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.dynamic-item {
+    background-color: #e9ecef;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #dee2e6;
+    position: relative;
+}
+
+.dynamic-item h4, .dynamic-item h5 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.dynamic-item .remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 3px 6px;
+    font-size: 12px;
+}
+
+.question-item {
+    border: 1px dashed #6c757d;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.question-options-container {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #cce5ff;
+    background-color: #e0f2ff;
+    border-radius: 5px;
+}
+
+.option-item {
+    background-color: #f8f9fa;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 3px;
+    border: 1px solid #e2e6ea;
+}
+
+.form-actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+/* Styles for the data table */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.data-table th, .data-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.data-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.data-table tbody tr:hover {
+    background-color: #e9e9e9;
+}
+
 /* Style cho các nút */
-.delete-user-btn,
+.action-btn,
 .add-btn {
-  width: 100px;
+  /* width: 100px; */
+  width: fit-content;
+
   padding: 10px 20px;
   margin-right: 10px;
   font-size: 1.2em;
@@ -67,13 +187,13 @@
   box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
 }
 
-.delete-user-btn:hover,
+.action-btn:hover,
 .add-btn:hover {
   background-color: rgb(3, 96, 196);
   transform: translateY(-2px);
 }
 
-.delete-user-btn:active,
+.action-btn:active,
 .add-btn:active {
   transform: translateY(0);
   box-shadow: none;
@@ -82,7 +202,7 @@
 /* Style cho nút "Thêm người dùng mới" */
 .add-btn {
   background-color: rgb(40, 167, 69);
-  width: 150px;
+  /* width: 150px; */
   margin-bottom: 20px;
 }
 
@@ -91,10 +211,15 @@
 }
 
 /* Màu cho nút Xoá */
-.delete-user-btn {
+.delete-btn {
   background-color: rgb(223, 21, 21);
 }
 
-.delete-user-btn:hover {
+.delete-btn:hover {
   background-color: rgb(190, 23, 23);
+}
+
+/* Style cho nút "Quay lại" */
+.back-btn {
+  margin-bottom: 20px;
 }

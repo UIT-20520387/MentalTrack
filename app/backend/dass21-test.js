@@ -273,13 +273,13 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (section === "Anxiety") {
       if (score >= 20) return "Rất nặng";
       if (score >= 15) return "Nặng";
-      if (score >= 10) return "Trung bình";
+      if (score >= 10) return "Vừa";
       if (score >= 8) return "Nhẹ";
       return "Bình thường";
     } else if (section === "Stress") {
       if (score >= 34) return "Rất nặng";
       if (score >= 26) return "Nặng";
-      if (score >= 19) return "Trung bình";
+      if (score >= 19) return "Vừa";
       if (score >= 15) return "Nhẹ";
       return "Bình thường";
     }
