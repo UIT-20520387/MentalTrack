@@ -14,6 +14,9 @@ import {
   where,
   orderBy,
   getDocs,
+  doc,
+  deleteDoc,
+  updateDoc,
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -52,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentUser = null;
   let selectedMoodValue = ""; // Lưu trữ giá trị 'happy', 'sad', v.v.
   let selectedMoodDisplayText = "..."; // Lưu trữ văn bản hiển thị như 'Hạnh phúc', 'Buồn'
+  let editingDocId = null; // Lưu trữ ID của nhật ký đang được chỉnh sửa
 
   //DOM Elements
   const moodButtons = document.querySelectorAll(".mood-btn");
@@ -171,16 +175,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const dateString = `${day}-${month}-${year}`;
 
     try {
-      await addDoc(collection(db, "emotionLogs"), {
-        uid: uid,
-        emotion: selectedMoodValue,
-        emotionTextDisplay: selectedMoodDisplayText,
-        intensity: intensity,
-        notes: notes,
-        timestamp: timestamp,
-        date: dateString,
-      });
-      showMessage("Nhật ký cảm xúc đã được lưu!", "mood-message");
+      if (editingDocId) {
+        // Đang ở chế độ chỉnh sửa
+        const docRef = doc(db, "emotionLogs", editingDocId);
+        await updateDoc(docRef, {
+          emotion: selectedMoodValue,
+          emotionTextDisplay: selectedMoodDisplayText,
+          intensity: intensity,
+          notes: notes,
+          timestamp: timestamp,
+          date: dateString,
+        });
+        showMessage("Nhật ký đã được cập nhật thành công!", "mood-message");
+      } else {
+        // Đang ở chế độ tạo mới
+        await addDoc(collection(db, "emotionLogs"), {
+          uid: uid,
+          emotion: selectedMoodValue,
+          emotionTextDisplay: selectedMoodDisplayText,
+          intensity: intensity,
+          notes: notes,
+          timestamp: timestamp,
+          date: dateString,
+        });
+        showMessage("Nhật ký cảm xúc đã được lưu!", "mood-message");
+      }
 
       // Reset Diary sau khi lưu thành công
       resetDiary();
@@ -189,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       console.error("Lỗi khi lưu nhật ký: ", error);
       showMessage(
-        "Đã có lỗi xảy ra khi lưu nhật ký. Vui lòng thử lại.",
+        "Đã có lỗi xảy ra khi lưu/chỉnh sửa nhật ký. Vui lòng thử lại.",
         "mood-message"
       );
     }
@@ -204,6 +223,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     diaryEntryText.value = "";
     moodButtons.forEach((btn) => btn.classList.remove("selected"));
+
+    editingDocId = null; // Đảm bảo không còn ở chế độ chỉnh sửa
+    saveDiaryBtn.textContent = "Lưu nhật ký"; // Đặt lại text nút
   }
 
   // ============== READ DIARY ==============
@@ -260,19 +282,56 @@ document.addEventListener("DOMContentLoaded", () => {
           date = "Chưa xác định";
         }
 
-        diaryItem.innerHTML = `
+        //Nội dung nhật ký
+        const contentHtml = `
                 <h3>${data.emotionTextDisplay || "Chưa xác định cảm xúc"}</h3>
                 <p>Ngày: ${date}</p>
                 <p>Tâm trạng: ${
                   moodTextMap[data.emotion] || "Chưa xác định cảm xúc"
                 }</p>
                 <p class="notes">${data.notes || "Không có ghi chú."}</p>
-                <button class="edit-btn" data-id="${doc.id}">Sửa</button>
-                <button class="delete-btn" data-id="${doc.id}">Xóa</button>
-            `;
+        `;
+        diaryItem.innerHTML = contentHtml;
+
+        //Tạo các hành động (Sửa, Xoá)
+        const actionsDiv = document.createElement("div");
+        actionsDiv.classList.add("diary-actions");
+
+        // Nút "Sửa"
+        const editButton = document.createElement("button");
+        editButton.classList.add("edit-btn");
+        editButton.textContent = "Sửa";
+        editButton.dataset.id = doc.id;
+        editButton.addEventListener("click", () =>
+          editDiaryEntry(doc.id, data)
+        );
+
+        // Nút "Xoá"
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("delete-btn");
+        deleteButton.textContent = "Xóa";
+        deleteButton.dataset.id = doc.id;
+        deleteButton.addEventListener("click", () =>
+          confirmDeleteDiaryEntry(doc.id, diaryItem)
+        );
+
+        actionsDiv.appendChild(editButton);
+        actionsDiv.appendChild(deleteButton);
+        diaryItem.appendChild(actionsDiv); // Thêm div chứa các nút vào diaryItem
+
         diaryEntriesContainer.appendChild(diaryItem);
+
+        // diaryItem.innerHTML = `
+        //         <h3>${data.emotionTextDisplay || "Chưa xác định cảm xúc"}</h3>
+        //         <p>Ngày: ${date}</p>
+        //         <p>Tâm trạng: ${
+        //           moodTextMap[data.emotion] || "Chưa xác định cảm xúc"
+        //         }</p>
+        //         <p class="notes">${data.notes || "Không có ghi chú."}</p>
+        //         <button class="edit-btn" data-id="${doc.id}">Sửa</button>
+        //         <button class="delete-btn" data-id="${doc.id}">Xóa</button>
+        //     `;
       });
-      // showMessage("Tải nhật ký thành công.", "no-diary-entries-message");
     } catch (error) {
       console.error("Lỗi khi tải nhật ký: ", error);
       showMessage(
@@ -281,9 +340,104 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
   }
+  // ============== Chức năng XÓA NHẬT KÝ (DELETE) ==============
+
+  // Hàm xác nhận và xóa nhật ký
+  function confirmDeleteDiaryEntry(docId, diaryItemElement) {
+    if (confirm("Bạn có chắc chắn muốn xóa nhật ký này không?")) {
+      deleteDiaryEntry(docId, diaryItemElement);
+    }
+  }
+
+  async function deleteDiaryEntry(docId, diaryItemElement) {
+    if (!currentUser) {
+      showMessage("Bạn cần đăng nhập để xóa nhật ký!", "error");
+      return;
+    }
+
+    try {
+      // Tạo một tham chiếu đến document cần xóa
+      const docRef = doc(db, "emotionLogs", docId);
+      await deleteDoc(docRef);
+
+      // Xóa phần tử khỏi giao diện người dùng (DOM)
+      diaryItemElement.remove();
+
+      showMessage(
+        "Nhật ký đã được xóa thành công!",
+        "no-diary-entries-message"
+      );
+
+      // Kiểm tra lại xem còn nhật ký nào không sau khi xóa
+      if (diaryEntriesContainer.children.length === 0) {
+        showMessage("Không còn nhật ký nào!", "no-diary-entries-message");
+      }
+    } catch (error) {
+      console.error("Lỗi khi xóa nhật ký: ", error);
+      showMessage(
+        "Đã có lỗi xảy ra khi xóa nhật ký. Vui lòng thử lại.",
+        "no-diary-entries-message"
+      );
+    }
+  }
+
+  // ============== Chức năng SỬA NHẬT KÝ (UPDATE) ==============
+
+  function editDiaryEntry(docId, data) {
+    if (!currentUser) {
+      showMessage(
+        "Bạn cần đăng nhập để sửa nhật ký!",
+        "no-diary-entries-message"
+      );
+      return;
+    }
+
+    // Lưu ID của nhật ký đang chỉnh sửa vào biến trạng thái
+    editingDocId = docId;
+
+    // Chuyển sang View viết nhật ký
+    switchView(newEntryView);
+
+    // Load nội dung nhật ký vào textarea
+    diaryEntryText.value = data.notes || "";
+
+    // Chọn lại nút cảm xúc
+    // Đảm bảo loại bỏ class 'selected' từ tất cả các nút trước
+    moodButtons.forEach((btn) => btn.classList.remove("selected"));
+    // Tìm và thêm class 'selected' vào nút tương ứng
+    const moodButtonToSelect = Array.from(moodButtons).find(
+      (btn) => btn.dataset.mood === data.emotion
+    );
+    if (moodButtonToSelect) {
+      moodButtonToSelect.classList.add("selected");
+      // Cập nhật selectedMoodValue và selectedMoodDisplayText
+      selectedMoodValue = data.emotion;
+      selectedMoodDisplayText =
+        data.emotionTextDisplay || moodTextMap[data.emotion];
+      if (feelingSpan) {
+        feelingSpan.textContent = selectedMoodDisplayText;
+      }
+    } else {
+      // Nếu không tìm thấy nút cảm xúc, reset về mặc định
+      selectedMoodValue = "";
+      selectedMoodDisplayText = "...";
+      if (feelingSpan) {
+        feelingSpan.textContent = selectedMoodDisplayText;
+      }
+      showMessage(
+        "Cảm xúc của nhật ký cũ không tìm thấy. Vui lòng chọn lại.",
+        "no-diary-entries-message"
+      );
+    }
+
+    // Thay đổi text của nút Lưu nhật ký
+    saveDiaryBtn.textContent = "Cập nhật nhật ký";
+    showMessage("Bạn đang chỉnh sửa nhật ký.", "no-diary-entries-message");
+  }
 
   // ============== Xử lý sự kiện nút điều hướng ==============
   showNewEntryViewBtn.addEventListener("click", () => {
+    resetDiary();
     switchView(newEntryView);
   });
 
