@@ -5,6 +5,11 @@ import {
   getAuth,
   signInWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+import {
+  getFirestore,
+  getDoc,
+  doc,
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -24,6 +29,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 //Show message
 function showMessage(message, divId) {
@@ -35,29 +42,57 @@ function showMessage(message, divId) {
     messageDiv.style.opacity = 0;
   }, 5000);
 }
+document.addEventListener("DOMContentLoaded", () => {
+  // DOM Elements
+  const loginForm = document.getElementById("login-form");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
 
-//Button
-const loginBtn = document.getElementById("login-btn");
-loginBtn.addEventListener("click", (event) => {
-  event.preventDefault();
+  //Button
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const auth = getAuth();
+      const email = emailInput.value;
+      const password = passwordInput.value;
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      showMessage("Đăng nhập thành công", "loginMessage");
-      const user = userCredential.user;
-      localStorage.setItem("loggedInUserId", user.uid);
-      window.location.href = "../html/homepage_signed_in.html";
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      if (errorCode == "auth/invalid-credential") {
-        showMessage("Email hoặc Mật khẩu sai", "loginMessage");
-      } else {
-        showMessage("Tài khoản không tồn tại", "loginMessage");
+      try {
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        showMessage("Đăng nhập thành công", "loginMessage");
+        const user = userCredential.user;
+        localStorage.setItem("loggedInUserId", user.uid);
+
+        const userDocRef = doc(db, "users", user.uid); // Tạo tham chiếu đến tài liệu user
+        const userDocSnap = await getDoc(userDocRef); // Lấy snapshot của tài liệu
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          if (userData.role === "admin") {
+            // Nếu người dùng là admin, chuyển hướng đến trang admin
+            window.location.href = "../html/admin.html";
+          } else {
+            // Nếu là người dùng thông thường hoặc không có trường role, chuyển hướng đến trang chính
+            window.location.href = "../html/homepage_signed_in.html";
+          }
+        } else {
+          console.warn(
+            "Tài liệu người dùng không tồn tại trong Firestore. Đăng xuất."
+          );
+          //signOut(); // Đăng xuất để tránh trạng thái không hợp lệ
+          window.location.href = "../html/login.html";
+        }
+      } catch (error) {
+        const errorCode = error.code;
+        if (errorCode == "auth/invalid-credential") {
+          showMessage("Email hoặc Mật khẩu sai", "loginMessage");
+        } else {
+          showMessage("Tài khoản không tồn tại", "loginMessage");
+        }
       }
     });
+  }
 });

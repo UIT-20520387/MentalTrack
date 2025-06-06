@@ -95,6 +95,7 @@ footer ul li a:hover {
 .home-content {
   padding: 20px;
   margin: 0 10px;
+  min-height: 400px;
 }
 
 .home-content h2 {

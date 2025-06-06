@@ -1,0 +1,100 @@
+/* General styles for the content area */
+.home-content > section {
+  padding: 20px;
+  background-color: #f8f9fa; /* Light background */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Style for the user table */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-table th,
+.user-table td {
+  border: none;
+  padding: 12px 15px;
+  text-align: left;
+  white-space: nowrap; /* Ngăn chữ bị xuống dòng */
+}
+
+.user-table th {
+  background-color: #e9ecef; /* Light grey header */
+  font-weight: 500;
+  color: #495057;
+}
+
+.user-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2; /* Alternating row color */
+}
+
+.user-table tbody tr:hover {
+  background-color: #f0f0f0; /* Hover effect */
+}
+
+.user-table th:first-child,
+.user-table td:first-child {
+  padding-left: 20px;
+}
+
+.user-table th:last-child,
+.user-table td:last-child {
+  padding-right: 20px;
+}
+
+/* Style cho các nút */
+.delete-user-btn,
+.add-btn {
+  width: 100px;
+  padding: 10px 20px;
+  margin-right: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+  background-color: rgb(56, 142, 237);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+}
+
+.delete-user-btn:hover,
+.add-btn:hover {
+  background-color: rgb(3, 96, 196);
+  transform: translateY(-2px);
+}
+
+.delete-user-btn:active,
+.add-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Style cho nút "Thêm người dùng mới" */
+.add-btn {
+  background-color: rgb(40, 167, 69);
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.add-btn:hover {
+  background-color: rgb(33, 136, 56);
+}
+
+/* Màu cho nút Xoá */
+.delete-user-btn {
+  background-color: rgb(223, 21, 21);
+}
+
+.delete-user-btn:hover {
+  background-color: rgb(190, 23, 23);
+}
