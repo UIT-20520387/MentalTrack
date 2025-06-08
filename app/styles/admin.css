@@ -167,12 +167,72 @@
     background-color: #e9e9e9;
 }
 
+/* Styles cho form bài đăng */
+.post-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.post-form .form-section {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.post-form .form-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.post-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.post-form input[type="text"],
+.post-form input[type="url"],
+.post-form input[type="number"],
+.post-form textarea,
+.post-form select {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.post-form input[type="file"] {
+    margin-bottom: 10px;
+}
+
+.current-thumbnail {
+    max-width: 150px;
+    height: auto;
+    display: block;
+    margin-top: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.file-status {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: -5px;
+    margin-bottom: 10px;
+}
+
 /* Style cho các nút */
 .action-btn,
 .add-btn {
-  /* width: 100px; */
   width: fit-content;
-
+  align-items: center;
   padding: 10px 20px;
   margin-right: 10px;
   font-size: 1.2em;
@@ -183,6 +243,7 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  white-space: nowrap;
   transition: background-color 0.3s ease, transform 0.2s ease;
   box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
 }
@@ -222,4 +283,9 @@
 /* Style cho nút "Quay lại" */
 .back-btn {
   margin-bottom: 20px;
+}
+
+/* Style cho nút Sửa */
+.delete-btn {
+  margin: 10px auto;
 }

@@ -14,11 +14,11 @@
 
     <!-- Links -->
     <link rel="stylesheet" href="../styles/shared.css">
-    <link rel="stylesheet" href="../styles/test.css">
+    <link rel="stylesheet" href="../styles/homepage-unsign-in.css">
+    <link rel="stylesheet" href="../styles/post.css">
     <link rel="icon"
         href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23c90e2d'><path d='M718-313 604-426l57-56 57 56 141-141 57 56-198 198ZM440-501Zm0 381L313-234q-72-65-123.5-116t-85-96q-33.5-45-49-87T40-621q0-94 63-156.5T260-840q52 0 99 22t81 62q34-40 81-62t99-22q81 0 136 45.5T831-680h-85q-18-40-53-60t-73-20q-51 0-88 27.5T463-660h-46q-31-45-70.5-72.5T260-760q-57 0-98.5 39.5T120-621q0 33 14 67t50 78.5q36 44.5 98 104T440-228q26-23 61-53t56-50l9 9 19.5 19.5L605-283l9 9q-22 20-56 49.5T498-172l-58 52Z'/></svg>"
         type="image/svg+xml">
-    <script type="module" src="../backend/user-profile.js"></script>
     <title>Mental Track</title>
 </head>
 
@@ -26,7 +26,7 @@
     <header>
         <ul class="menu">
             <li>
-                <a href="../html/homepage_signed_in.html">
+                <a href="../html/index.html">
                     <div class="menu-item">
                         <span class="material-symbols-outlined">home</span>
                         <span>Trang chủ</span>
@@ -70,7 +70,25 @@
                 </a>
             </li>
 
-            <li>
+            <li id="loginMenuItem">
+                <a href="../html/login.html">
+                    <div class="menu-item">
+                        <span class="material-symbols-outlined">login</span>
+                        <span>Đăng nhập</span>
+                    </div>
+                </a>
+            </li>
+
+            <li id="signupMenuItem">
+                <a href="../html/sign-up.html">
+                    <div class="menu-item">
+                        <span class="material-symbols-outlined">person_add</span>
+                        <span>Đăng ký</span>
+                    </div>
+                </a>
+            </li>
+
+            <li id="logoutMenuItem" style="display:none;">
                 <a href="#">
                     <div class="menu-item" id="logout">
                         <span class="material-symbols-outlined">logout</span>
@@ -79,7 +97,7 @@
                 </a>
             </li>
 
-            <li>
+            <li id="profileMenuItem" style="display:none;">
                 <a href="../html/user-profile.html">
                     <div class="menu-item">
                         <span class="material-symbols-outlined">account_circle</span>
@@ -89,25 +107,30 @@
             </li>
         </ul>
     </header>
-    <main class="home-content">
-        <section id="test">
-            <h2>Bài kiểm tra trắc nghiệm</h2>
-            <div class="test-list">
-                <div class="test-item">
-                    <h3><a href="../html/dass21-test.html">DASS-21</a></h3>
-                    <p>DASS-21 là viết tắt của Depression Anxiety Stress Scales - 21 Items. Đây là bài test đánh giá bao
-                        gồm 21 câu hỏi nhằm đánh giá mức độ Trầm cảm, Lo âu, Căng thẳng.</p>
-                    <a href="../html/dass21-test.html" class="do-test">Làm bài test</a>
+
+    <main id="mainContent" class="home-content">
+        <div class="post-listing-container">
+            <h2>Bài Đăng</h2>
+            <div class="tab-navigation">
+                <button class="tab-button active" data-type="article">Bài viết</button>
+                <button class="tab-button" data-type="video">Video</button>
+                <button class="tab-button" data-type="podcast">Podcast</button>
+            </div>
+
+            <div id="postsList">
+                <div id="articleTabContent" class="tab-content active">
+                    <p class="no-posts-message">Đang tải bài viết...</p>
                 </div>
-                <div class="test-item">
-                    <h3><a href="../html/gad7-test.html">GAD-7</a></h3>
-                    <p>GAD-7, hay còn được gọi là Generalized Anxiety Disorder 7, là một bài test gồm 7 câu hỏi nhằm
-                        đánh giá mức độ lo âu tổng quát. </p>
-                    <a href="../html/gad7-test.html" class="do-test">Làm bài test</a>
+                <div id="videoTabContent" class="tab-content">
+                    <p class="no-posts-message">Đang tải video...</p>
+                </div>
+                <div id="podcastTabContent" class="tab-content">
+                    <p class="no-posts-message">Đang tải podcast...</p>
                 </div>
             </div>
-        </section>
+        </div>
     </main>
+
     <footer>
         <div class="container">
             <p>&copy; 2025 Mental Track. All rights reserved.</p>
@@ -118,6 +141,9 @@
             </ul>
         </div>
     </footer>
+    <script type="module" src="../backend/post.js"></script>
+    <script type="module" src="../backend/homepage.js"></script>
+    <script type="module" src="../backend/user-profile.js"></script>
 
 </body>
 

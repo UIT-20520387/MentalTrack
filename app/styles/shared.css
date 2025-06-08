@@ -119,3 +119,11 @@ footer ul li a:hover {
   opacity: 0;
   animation: fadeOut 5s forwards;
 }
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  font-weight: bold;
+}

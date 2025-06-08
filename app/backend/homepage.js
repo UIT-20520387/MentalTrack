@@ -11,6 +11,8 @@ import {
   query,
   where,
   getDocs,
+  doc,
+  getDoc,
   orderBy,
   Timestamp,
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
@@ -48,10 +50,96 @@ function showMessage(message, divId) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  // --- CÁC BIẾN UI ELEMENTS CẦN THIẾT ---
+const logoutMenuItem = document.getElementById('logoutMenuItem'); // ID cho li chứa nút Đăng xuất
+const profileMenuItem = document.getElementById('profileMenuItem'); // ID cho li chứa Hồ sơ
+const loginMenuItem = document.getElementById('loginMenuItem'); // ID cho li chứa Đăng nhập
+const signupMenuItem = document.getElementById('signupMenuItem'); // ID cho li chứa Đăng ký
+
+let currentUser = null; 
+
+// --- HÀM XỬ LÝ THANH ĐIỀU HƯỚNG DỰA TRÊN TRẠNG THÁI ĐĂNG NHẬP ---
+function updateNavigation(user) {
+    if (user) {
+        // Người dùng đã đăng nhập
+        // Hiển thị Đăng xuất, Hồ sơ
+        if (logoutMenuItem) logoutMenuItem.style.display = 'list-item';
+        if (profileMenuItem) profileMenuItem.style.display = 'list-item';
+        // Ẩn Đăng nhập, Đăng ký
+        if (loginMenuItem) loginMenuItem.style.display = 'none';
+        if (signupMenuItem) signupMenuItem.style.display = 'none';
+    } else {
+        // Người dùng chưa đăng nhập
+        // Ẩn Đăng xuất, Hồ sơ
+        if (logoutMenuItem) logoutMenuItem.style.display = 'none';
+        if (profileMenuItem) profileMenuItem.style.display = 'none';
+        // Hiển thị Đăng nhập, Đăng ký
+        if (loginMenuItem) loginMenuItem.style.display = 'list-item';
+        if (signupMenuItem) signupMenuItem.style.display = 'list-item';
+    }
+}
+
+// --- LISTENER TRẠNG THÁI XÁC THỰC CỦA FIREBASE ---
+onAuthStateChanged(auth, (user) => {
+    currentUser = user; // Cập nhật biến currentUser
+    updateNavigation(user); // Cập nhật UI ngay lập tức
+
+    const path = window.location.pathname;
+    if (path.includes('restricted-access.html')) {
+        handleRestrictedAccessPage(user);
+    }
+});
+
+// --- XỬ LÝ TRANG TRUY CẬP BỊ HẠN CHẾ ---
+function handleRestrictedAccessPage(user) {
+    const pageTitleElement = document.getElementById('pageTitle');
+    const restrictedTitleElement = document.getElementById('restrictedTitle');
+    const restrictedMessageElement = document.getElementById('restrictedMessage');
+    
+    // Lấy tên trang gốc từ URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const originalPage = urlParams.get('page');
+    let pageName = '';
+
+    switch (originalPage) {
+        case 'diary':
+            pageName = 'Nhật ký cảm xúc';
+            break;
+        case 'test':
+            pageName = 'Bài kiểm tra';
+            break;
+        case 'goal':
+            pageName = 'Mục tiêu';
+            break;
+        default:
+            pageName = 'này'; // Fallback nếu không xác định được trang
+            break;
+    }
+
+    if (user) {
+        // Nếu người dùng đã đăng nhập
+        if (restrictedTitleElement) restrictedTitleElement.textContent = `Chào mừng đến với trang ${pageName}!`;
+        if (pageTitleElement) pageTitleElement.textContent = `${pageName} - Mental Track`;
+        if (restrictedMessageElement) {
+            // Đây là nơi bạn sẽ gọi hàm để tải nội dung thực tế của trang
+            // Ví dụ: loadJournalContent() nếu originalPage === 'journal'
+            restrictedMessageElement.innerHTML = `Nội dung của trang "${pageName}" sẽ được hiển thị tại đây khi bạn đăng nhập.`;
+            // Hoặc chuyển hướng đến trang thật của chức năng nếu có
+            // Ví dụ: if (originalPage === 'journal') window.location.href = 'journal.html';
+        }
+    } else {
+        // Nếu người dùng chưa đăng nhập
+        if (restrictedTitleElement) restrictedTitleElement.textContent = `Bạn phải đăng nhập để truy cập!`;
+        if (pageTitleElement) pageTitleElement.textContent = `Truy Cập Bị Hạn Chế - Mental Track`;
+        if (restrictedMessageElement) {
+            restrictedMessageElement.innerHTML = `Bạn phải đăng nhập mới xem được trang "${pageName}" của mình. Vui lòng <a href="../html/login.html">đăng nhập</a>.`;
+        }
+    }
+}
+
+  // ----- HIỂN THỊ BIỂU ĐỒ -----
   const emotionChartCanvas = document.getElementById("emotionChart");
   let emotionChart = null; // Biến để lưu trữ đối tượng biểu đồ Chart.js
-
-  let currentUser = null;
 
   const moodColorMap = {
     happy: "rgba(38, 215, 238, 0.911)",
