@@ -137,8 +137,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       // Người dùng đã đăng xuất
       currentUser = null;
+      window.location.href = "../html/restricted-access.html";
       console.log("Người dùng chưa đăng nhập.");
-      showMessage("Vui lòng đăng nhập để viết nhật ký", "mood-message");
     }
   });
 
