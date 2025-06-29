@@ -13,8 +13,10 @@ import {
   getDocs,
   doc,
   getDoc,
+  addDoc,
   orderBy,
   Timestamp,
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -83,7 +85,7 @@ async function loadAssessmentsList() {
 
   try {
     const assessmentsColRef = collection(db, "assessments");
-    const q = query(assessmentsColRef, orderBy("updatedAt" , "desc"));
+    const q = query(assessmentsColRef, orderBy("updatedAt", "desc"));
     const querySnapshot = await getDocs(q);
 
     let assessmentsHtml = "";
@@ -114,7 +116,7 @@ async function loadAssessmentsList() {
   }
 }
 
-// --- HÀM: TẢI VÀ LÀM BÀI KIỂM TRA CHO 'quiz_detail.html' ---
+// --- HÀM: TẢI VÀ LÀM BÀI KIỂM TRA' ---
 let currentAssessment = null; // Biến để lưu trữ dữ liệu bài kiểm tra chính
 let currentQuestions = []; // Biến để lưu trữ các câu hỏi từ sub-collection
 
@@ -251,9 +253,30 @@ async function loadQuizDetail() {
 }
 
 // --- HÀM XỬ LÝ NỘP BÀI KIỂM TRA (Sử dụng scaleOptions và question.options.value) ---
-function handleSubmitQuiz() {
+async function handleSubmitQuiz() {
   let totalScore = 0;
   let answeredCount = 0;
+  let depressionScore = 0;
+  let anxietyScore = 0;
+  let stressScore = 0;
+  let responses = [];
+
+  // Lấy ID bài kiểm tra từ URL để lưu vào Firestore
+  const urlParams = new URLSearchParams(window.location.search);
+  const assessmentId = urlParams.get("id");
+
+  // Đảm bảo currentAssessment đã được load
+  if (!currentAssessment) {
+    console.error("Dữ liệu bài kiểm tra chưa được tải đầy đủ.");
+    showMessage(
+      "Không thể xử lý bài kiểm tra. Vui lòng tải lại trang.",
+      "generalMessage"
+    );
+    return;
+  }
+
+  // assessmentId = currentAssessment.id; // Lấy loại bài kiểm tra từ currentAssessment
+  // const isDASS21ById = assessmentId === "DASS-21";
 
   // Đối với mỗi câu hỏi trong currentQuestions
   currentQuestions.forEach((q, qIndex) => {
@@ -261,6 +284,9 @@ function handleSubmitQuiz() {
       `.quiz-question[data-question-index="${qIndex}"]`
     );
     if (!questionElement) return;
+
+    let selectedScore = 0;
+    let selectedOptionText = ""; // Để lưu trữ text của câu trả lời
 
     if (q.type === "Chọn nhiều đáp án") {
       // Đối với câu hỏi chọn nhiều đáp án (checkbox)
@@ -270,30 +296,52 @@ function handleSubmitQuiz() {
       if (selectedOptions.length > 0) {
         answeredCount++;
         selectedOptions.forEach((selected) => {
-          totalScore += parseInt(selected.dataset.optionValue || 0);
+          const score = parseInt(selected.dataset.optionValue || 0);
+          selectedScore += score;
+          // Lấy text của option để lưu lại
+          const optionIndex = parseInt(selected.value, 10);
+          if (q.options[optionIndex]) {
+            selectedOptionText += q.options[optionIndex].text + "; ";
+          }
         });
       }
     } else {
-      // Mặc định là 'Chọn một đáp án' (radio)
       const selectedOption = questionElement.querySelector(
         `input[name="question-${qIndex}"]:checked`
       );
       if (selectedOption) {
         answeredCount++;
-        totalScore += parseInt(selectedOption.dataset.optionValue || 0);
+        selectedScore = parseInt(selectedOption.dataset.optionValue || 0);
+        // Lấy text của option để lưu lại
+        const optionIndex = parseInt(selectedOption.value, 10);
+        if (q.options[optionIndex]) {
+          selectedOptionText = q.options[optionIndex].text;
+        }
       }
+    }
+    totalScore += selectedScore;
+    responses.push({
+      questionId: q.order, // Sử dụng order làm ID câu hỏi để dễ truy xuất
+      questionText: q.text,
+      selectedScore: selectedScore,
+      selectedOptionText: selectedOptionText,
+      section: q.section || null, // Thêm category vào responses nếu có
+    });
+
+    // Nếu là DASS-21, tính điểm cho từng phần
+    if (assessmentId === "DASS-21" && q.section) {
+      if (q.section === "Depression") depressionScore += selectedScore;
+      if (q.section === "Anxiety") anxietyScore += selectedScore;
+      if (q.section === "Stress") stressScore += selectedScore;
     }
   });
 
-  const quizResultDiv = document.getElementById("quizResult");
-  if (quizResultDiv) {
-    quizResultDiv.style.display = "block";
-    quizResultDiv.innerHTML = `
-            <h2>Kết quả của bạn</h2>
-            <p>Bạn đã hoàn thành ${answeredCount} trên tổng số ${currentQuestions.length} câu hỏi.</p>
-            <p>Tổng điểm của bạn: <strong>${totalScore}</strong></p>
-            <a href="../html/test.html" class="back-to-list-btn action-btn">Quay lại danh sách bài kiểm tra</a>
-        `;
+  if (answeredCount !== currentQuestions.length) {
+    showMessage(
+      `Vui lòng trả lời tất cả các câu hỏi (${answeredCount}/${currentQuestions.length}).`,
+      "generalMessage"
+    );
+    return;
   }
 
   // Vô hiệu hóa các input sau khi nộp bài
@@ -302,4 +350,172 @@ function handleSubmitQuiz() {
   });
   const submitQuizBtn = document.getElementById("submitQuizBtn");
   if (submitQuizBtn) submitQuizBtn.style.display = "none"; // Ẩn nút nộp bài
+
+  // --- Xử lý đánh giá và hiển thị kết quả chi tiết ---
+  const quizResultDiv = document.getElementById("quizResult");
+  const quizResultDetailsDiv = document.getElementById("quizResultDetails");
+
+  if (quizResultDiv) {
+    quizResultDiv.style.display = "block";
+    quizResultDiv.innerHTML = `
+            <h2>Kết quả của bạn</h2>
+            <p>Bạn đã hoàn thành ${answeredCount} trên tổng số ${currentQuestions.length} câu hỏi.</p>
+            <p>Tổng điểm của bạn: <strong>${totalScore}</strong></p>
+        `;
+  }
+
+  let resultDetails = {};
+  if (assessmentId === "GAD-7") {
+    resultDetails = evaluateGAD7(totalScore);
+    if (quizResultDetailsDiv) {
+      quizResultDetailsDiv.style.display = "block";
+      quizResultDetailsDiv.innerHTML = `
+                <h3>Đánh giá chi tiết (GAD-7)</h3>
+                <p>Mức độ lo âu của bạn: <strong>${resultDetails.level}</strong></p>
+                <p>${resultDetails.message}</p>
+            `;
+    }
+  } else if (assessmentId === "DASS-21") {
+    resultDetails = evaluateDASS21(depressionScore, anxietyScore, stressScore);
+    if (quizResultDetailsDiv) {
+      quizResultDetailsDiv.style.display = "block";
+      quizResultDetailsDiv.innerHTML = `
+                <h3>Đánh giá chi tiết (DASS-21)</h3>
+                <p>Điểm Trầm cảm: <strong>${depressionScore}</strong> (Mức độ: ${resultDetails.level.depression})</p>
+                <p>Điểm Lo âu: <strong>${anxietyScore}</strong> (Mức độ: ${resultDetails.level.anxiety})</p>
+                <p>Điểm Stress: <strong>${stressScore}</strong> (Mức độ: ${resultDetails.level.stress})</p>
+                ${resultDetails.message}
+            `;
+    }
+  } else {
+    // Đối với các loại bài kiểm tra khác, chỉ hiển thị tổng điểm
+    if (quizResultDetailsDiv) {
+      quizResultDetailsDiv.style.display = "block";
+      quizResultDetailsDiv.innerHTML = `
+                <p>Không có đánh giá chi tiết cho loại bài kiểm tra này.</p>
+            `;
+    }
+  }
+
+  // --- Lưu kết quả vào Firestore ---
+  if (currentUser) {
+    try {
+      const userAssessmentRef = collection(
+        db,
+        `users/${currentUser.uid}/assessmentsCompleted`
+      );
+      addDoc(userAssessmentRef, {
+        assessmentId: assessmentId,
+        assessmentName: currentAssessment.name,
+        assessmentType: assessmentType, // Lưu loại bài kiểm tra
+        totalScore: totalScore,
+        // Lưu điểm chi tiết cho DASS-21
+        depressionScore: assessmentId === "DASS-21" ? depressionScore : null,
+        anxietyScore: assessmentId === "DASS-21" ? anxietyScore : null,
+        stressScore: assessmentId === "DASS-21" ? stressScore : null,
+        // Lưu kết quả phân loại
+        resultLevelGAD7:
+          assessmentId === "GAD-7" ? resultDetails.level : null,
+        resultMessageGAD7:
+          assessmentId === "GAD-7" ? resultDetails.message : null,
+        resultLevelDASS21:
+          assessmentId === "DASS-21" ? resultDetails.level : null, // object {depression, anxiety, stress}
+        resultMessageDASS21:
+          assessmentId === "DASS-21" ? resultDetails.message : null, // HTML string
+
+        responses: responses, // Lưu cả câu trả lời chi tiết
+        completedAt: serverTimestamp(),
+      });
+      showMessage("Bài kiểm tra đã được nộp thành công!", "generalMessage");
+    } catch (error) {
+      console.error("Lỗi khi lưu kết quả bài kiểm tra:", error);
+      showMessage(
+        "Có lỗi xảy ra khi lưu kết quả. Vui lòng thử lại.",
+        "generalMessage"
+      );
+    }
+  } else {
+    showMessage(
+      "Bạn cần đăng nhập để lưu kết quả bài kiểm tra.",
+      "generalMessage"
+    );
+  }
+
+  // Thêm nút quay lại danh sách bài kiểm tra sau khi xem kết quả
+  if (quizResultDiv) {
+    quizResultDiv.innerHTML += `
+            <a href="../html/test.html" class="back-to-list-btn action-btn">Quay lại danh sách bài kiểm tra</a>
+        `;
+  }
+}
+
+// --- HÀM ĐÁNH GIÁ KẾT QUẢ GAD-7 ---
+function evaluateGAD7(totalScore) {
+  let level = "";
+  let message = "";
+
+  if (totalScore >= 15) {
+    level = "Lo âu nặng";
+    message =
+      "Điểm số của bạn cho thấy mức độ lo âu nặng. Bạn nên tìm kiếm sự hỗ trợ từ chuyên gia sức khỏe tâm thần.";
+  } else if (totalScore >= 10) {
+    level = "Lo âu vừa";
+    message =
+      "Điểm số của bạn cho thấy mức độ lo âu vừa phải. Việc nói chuyện với chuyên gia hoặc áp dụng các kỹ thuật thư giãn có thể hữu ích.";
+  } else if (totalScore >= 5) {
+    level = "Lo âu nhẹ";
+    message =
+      "Điểm số của bạn cho thấy mức độ lo âu nhẹ. Hãy chú ý đến cảm xúc của mình và tìm cách thư giãn.";
+  } else {
+    // totalScore from 0 to 4
+    level = "Bình thường";
+    message =
+      "Điểm số của bạn cho thấy mức độ lo âu bình thường. Hãy tiếp tục duy trì sức khỏe tinh thần tốt.";
+  }
+
+  return { totalScore, level, message };
+}
+
+// --- HÀM ĐÁNH GIÁ KẾT QUẢ DASS-21 ---
+function evaluateDASS21(depressionScore, anxietyScore, stressScore) {
+  let depressionLevel = "";
+  let anxietyLevel = "";
+  let stressLevel = "";
+
+  // Evaluate Depression
+  if (depressionScore >= 28) depressionLevel = "Trầm cảm rất nặng";
+  else if (depressionScore >= 21) depressionLevel = "Trầm cảm nặng";
+  else if (depressionScore >= 14) depressionLevel = "Trầm cảm vừa";
+  else if (depressionScore >= 10) depressionLevel = "Trầm cảm nhẹ";
+  else depressionLevel = "Bình thường";
+
+  // Evaluate Anxiety
+  if (anxietyScore >= 20) anxietyLevel = "Lo âu rất nặng";
+  else if (anxietyScore >= 15) anxietyLevel = "Lo âu nặng";
+  else if (anxietyScore >= 10) anxietyLevel = "Lo âu vừa";
+  else if (anxietyScore >= 8) anxietyLevel = "Lo âu nhẹ";
+  else anxietyLevel = "Bình thường";
+
+  // Evaluate Stress
+  if (stressScore >= 34) stressLevel = "Stress rất nặng";
+  else if (stressScore >= 26) stressLevel = "Stress nặng";
+  else if (stressScore >= 19) stressLevel = "Stress vừa";
+  else if (stressScore >= 15) stressLevel = "Stress nhẹ";
+  else stressLevel = "Bình thường";
+
+  const overallMessage = `
+        <p><em>Lưu ý: Đây chỉ là kết quả tự đánh giá. Nếu bạn có bất kỳ lo lắng nào về sức khỏe tinh thần, vui lòng tìm kiếm sự tư vấn từ chuyên gia.</em></p>
+    `;
+
+  return {
+    depressionScore,
+    anxietyScore,
+    stressScore,
+    level: {
+      depression: depressionLevel,
+      anxiety: anxietyLevel,
+      stress: stressLevel,
+    },
+    message: overallMessage, // Sử dụng message đơn giản hơn, phần level đã trực quan hóa trong HTML
+  };
 }
