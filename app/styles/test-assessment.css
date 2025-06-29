@@ -257,3 +257,37 @@
   color: #d9534f;
   padding: 20px;
 }
+
+.quiz-result-details {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.quiz-result-details h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.quiz-result-details p {
+    margin: 8px 0;
+    line-height: 1.6;
+    font-size: 1.1em;
+}
+
+.quiz-result-details strong {
+    color: #007bff; /* Màu xanh nổi bật cho kết quả */
+    font-weight: bold;
+}
+
+.quiz-result-details em {
+    font-size: 0.9em;
+    color: #666;
+    display: block;
+    margin-top: 15px;
+}
